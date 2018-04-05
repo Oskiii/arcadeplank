@@ -3,16 +3,17 @@ using UnityEngine;
 
 public class RodControls : MonoBehaviour
 {
-    [SerializeField] private float _rotationSpeed = 1f;
     [SerializeField] private Transform _visual;
+    public float Angle { get; private set; }
 
     private void Update()
     {
-        transform.Rotate(0f, 0f, _rotationSpeed);
+        Angle = LevelManager.Instance.RotationSpeed * Time.deltaTime;
+        transform.Rotate(0f, 0f, Angle);
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            AttachTo(LevelManager.Instance.Dots.PopAt(0));
+            AttachTo(LevelManager.Instance.PopDot());
         }
     }
 
@@ -21,6 +22,7 @@ public class RodControls : MonoBehaviour
         //transform.SetParent(dot.transform, false);
         transform.position = dot.transform.position;
         FlipPivot();
+        LevelManager.Instance.RotationSpeed *= -1;
     }
 
     private void FlipPivot()
